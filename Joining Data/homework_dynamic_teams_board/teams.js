@@ -53,7 +53,7 @@ function updateBoard(data) {
             teamDiv.append('div').attr('class', 'points');
             teamDiv.append('div').attr('class', 'gd');
 
-            teamDiv.transition()
+            teamDiv.transition("state")
                 .duration(1000)
                 .style('opacity', 1)
                 .style('transform', 'translateX(0)')
@@ -65,7 +65,7 @@ function updateBoard(data) {
         },
         update => {
             update.classed('updating', true)
-                .transition()
+                .transition("state")
                 .duration(1000)
                 .on('end', function () {
                     d3.select(this).classed('updating', false);
@@ -74,7 +74,7 @@ function updateBoard(data) {
         },
         exit => {
             exit.classed('exiting', true)
-                .transition()
+                .transition("state")
                 .duration(1000)
                 .style('opacity', 0)
                 .style('transform', 'translateX(20px)')
@@ -95,9 +95,8 @@ function updateBoard(data) {
         team.select('.points').text(d.points);
         team.select('.gd').text(gd > 0 ? `+${gd}` : gd);
 
-        // Animate position (top) for all teams
-        // Using transition on the selection itself is safer
-        team.transition()
+        // Use a named transition for positioning to avoid cancelling the "state" transition
+        team.transition("position")
             .duration(1000)
             .style('top', `${index * rowHeight}px`);
     });
