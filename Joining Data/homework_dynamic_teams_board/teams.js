@@ -36,15 +36,43 @@ function updateBoard(data) {
 
     teamSelection.join(
         enter => {
-            const teamDiv = enter.append('div').attr('class', 'team');
+            const teamDiv = enter.append('div')
+                .attr('class', 'team entering')
+                .style('opacity', 0)
+                .style('transform', 'translateX(-20px)');
+
             teamDiv.append('div').attr('class', 'position');
             teamDiv.append('div').attr('class', 'name');
             teamDiv.append('div').attr('class', 'points');
             teamDiv.append('div').attr('class', 'gd');
+
+            teamDiv.transition()
+                .duration(1000)
+                .style('opacity', 1)
+                .style('transform', 'translateX(0)')
+                .on('end', function () {
+                    d3.select(this).classed('entering', false);
+                });
+
             return teamDiv;
         },
-        update => update,
-        exit => exit.remove()
+        update => {
+            update.classed('updating', true)
+                .transition()
+                .duration(1000)
+                .on('end', function () {
+                    d3.select(this).classed('updating', false);
+                });
+            return update;
+        },
+        exit => {
+            exit.classed('exiting', true)
+                .transition()
+                .duration(1000)
+                .style('opacity', 0)
+                .style('transform', 'translateX(20px)')
+                .remove();
+        }
     );
 
     // 3. Update all teams (including newly entered ones)

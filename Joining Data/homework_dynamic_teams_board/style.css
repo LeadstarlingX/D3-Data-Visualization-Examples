@@ -37,11 +37,23 @@ h1 {
     align-items: center;
     padding: 15px 20px;
     border-bottom: 1px solid #e5e5e5;
-    transition: background-color 0.2s;
+    transition: background-color 0.5s, transform 0.5s, opacity 0.5s;
+    background-color: var(--card-bg);
 }
 
-.team:last-child {
-    border-bottom: none;
+.team.entering {
+    background-color: #e6ffed !important;
+    /* Light green */
+}
+
+.team.updating {
+    background-color: #f0f7ff !important;
+    /* Light blue */
+}
+
+.team.exiting {
+    background-color: #fff1f0 !important;
+    /* Light red */
 }
 
 .position {
@@ -55,7 +67,8 @@ h1 {
     font-weight: 600;
 }
 
-.points, .gd {
+.points,
+.gd {
     width: 60px;
     text-align: right;
     font-weight: 600;
