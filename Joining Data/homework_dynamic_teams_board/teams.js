@@ -101,3 +101,6 @@ function updateData() {
 
 // Initial call
 updateBoard(teams);
+
+// Set interval to update data every 2.5 seconds
+setInterval(updateData, 2500);
