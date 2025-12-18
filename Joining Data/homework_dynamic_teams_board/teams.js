@@ -76,14 +76,29 @@ function updateBoard(data) {
     );
 
     // 3. Update all teams (including newly entered ones)
+    const rowHeight = 50;
+
     leaderboard.selectAll('.team').each(function (d, i) {
         const team = d3.select(this);
+        const index = data.findIndex(t => t.name === d.name);
+
+        // If the team is not in the current data (exiting), it will be handled by exit
+        if (index === -1) return;
+
         const gd = d.goalsFor - d.goalsAgainst;
-        team.select('.position').text(i + 1);
+        team.select('.position').text(index + 1);
         team.select('.name').text(d.name);
         team.select('.points').text(d.points);
         team.select('.gd').text(gd > 0 ? `+${gd}` : gd);
+
+        // Animate position
+        team.transition()
+            .duration(1000)
+            .style('top', `${index * rowHeight}px`);
     });
+
+    // Adjust leaderboard container height
+    leaderboard.style('height', `${data.length * rowHeight}px`);
 
     console.log('Board updated with data:', data);
 }
@@ -94,14 +109,14 @@ function updateData() {
     teams.forEach(team => {
         if (Math.random() > 0.5) {
             const goals = Math.floor(Math.random() * 3);
-            team.points += Math.random() > 0.7 ? 3 : (Math.random() > 0.5 ? 1 : 0);
+            team.points += Math.random() > 0.7 ? 3 : (Math.random() > 0.4 ? 1 : 0);
             team.goalsFor += goals;
             team.goalsAgainst += Math.floor(Math.random() * 2);
         }
     });
 
     // 2. Occasionally add a new team
-    if (Math.random() > 0.8 && potentialTeams.length > 0) {
+    if (Math.random() > 0.7 && potentialTeams.length > 0) {
         const randomIndex = Math.floor(Math.random() * potentialTeams.length);
         const newTeamName = potentialTeams.splice(randomIndex, 1)[0];
         teams.push({
@@ -114,7 +129,7 @@ function updateData() {
     }
 
     // 3. Occasionally remove a team
-    if (Math.random() > 0.9 && teams.length > 5) {
+    if (Math.random() > 0.8 && teams.length > 6) {
         const randomIndex = Math.floor(Math.random() * teams.length);
         const removedTeam = teams.splice(randomIndex, 1)[0];
         potentialTeams.push(removedTeam.name);
@@ -123,9 +138,6 @@ function updateData() {
 
     updateBoard(teams);
 }
-
-// TODO: Set interval to update data every 2-3 seconds
-// setInterval(() => { updateData(); updateBoard(currentData); }, 2000);
 
 // Initial call
 updateBoard(teams);
