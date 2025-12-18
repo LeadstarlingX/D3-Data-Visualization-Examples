@@ -1,38 +1,69 @@
+:root {
+    --primary-bg: #f0f2f5;
+    --card-bg: #ffffff;
+    --text-primary: #1c1e21;
+    --text-secondary: #606770;
+    --accent: #1877f2;
+}
+
 body {
-    font-family: Arial, sans-serif;
-    margin: 20px;
-    background-color: #f9f9f9;
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: var(--primary-bg);
+    color: var(--text-primary);
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 h1 {
     text-align: center;
+    font-weight: 800;
+    margin-bottom: 30px;
 }
 
 #leaderboard {
-    max-width: 600px;
-    margin: 0 auto;
+    background-color: var(--card-bg);
+    border-radius: 8px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
 }
 
 .team {
     display: flex;
-    justify-content: space-between;
-    padding: 10px;
-    margin: 5px 0;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid #e5e5e5;
+    transition: background-color 0.2s;
+}
+
+.team:last-child {
+    border-bottom: none;
 }
 
 .position {
-    font-weight: bold;
-    width: 30px;
+    font-weight: 600;
+    width: 40px;
+    color: var(--text-secondary);
 }
 
 .name {
     flex: 1;
+    font-weight: 600;
 }
 
 .points, .gd {
-    width: 50px;
+    width: 60px;
     text-align: right;
+    font-weight: 600;
+}
+
+.label {
+    font-size: 12px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
