@@ -41,6 +41,11 @@ function updateBoard(data) {
                 .style('opacity', 0)
                 .style('transform', 'translateX(-20px)');
 
+            teamDiv.each(function (d) {
+                const index = data.findIndex(t => t.name === d.name);
+                d3.select(this).style('top', `${index * rowHeight}px`);
+            });
+
             teamDiv.append('div').attr('class', 'position');
             teamDiv.append('div').attr('class', 'name');
             teamDiv.append('div').attr('class', 'points');
