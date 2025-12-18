@@ -15,20 +15,48 @@ let teams = [
 
 // Potential new teams pool
 const potentialTeams = [
-    'Barcelona', 'AC Milan', 'Borussia Dortmund', 'Napoli', 'Atletico Madrid', 
+    'Barcelona', 'AC Milan', 'Borussia Dortmund', 'Napoli', 'Atletico Madrid',
     'Bayer Leverkusen', 'Juventus', 'Chelsea', 'Tottenham', 'Porto'
 ];
 
-// Function to update the board (placeholder for now)
+// Function to update the board
 function updateBoard(data) {
-    // TODO: Sort data by points descending, then goal difference
+    // 1. Sort data by points descending, then goal difference
+    data.sort((a, b) => {
+        const gdA = a.goalsFor - a.goalsAgainst;
+        const gdB = b.goalsFor - b.goalsAgainst;
+        if (b.points !== a.points) return b.points - a.points;
+        return gdB - gdA;
+    });
 
-    // TODO: Use selectAll.data().join() for enter-update-exit
-    // Enter: new teams slide in
-    // Update: teams move to new positions, update scores
-    // Exit: teams slide out
+    // 2. Use selectAll.data().join() for enter-update-exit
+    const teamSelection = leaderboard
+        .selectAll('.team')
+        .data(data, d => d.name);
 
-    // TODO: For each team div, set position, name, points, gd
+    teamSelection.join(
+        enter => {
+            const teamDiv = enter.append('div').attr('class', 'team');
+            teamDiv.append('div').attr('class', 'position');
+            teamDiv.append('div').attr('class', 'name');
+            teamDiv.append('div').attr('class', 'points');
+            teamDiv.append('div').attr('class', 'gd');
+            return teamDiv;
+        },
+        update => update,
+        exit => exit.remove()
+    );
+
+    // 3. Update all teams (including newly entered ones)
+    leaderboard.selectAll('.team').each(function (d, i) {
+        const team = d3.select(this);
+        const gd = d.goalsFor - d.goalsAgainst;
+        team.select('.position').text(i + 1);
+        team.select('.name').text(d.name);
+        team.select('.points').text(d.points);
+        team.select('.gd').text(gd > 0 ? `+${gd}` : gd);
+    });
+
     console.log('Board updated with data:', data);
 }
 
