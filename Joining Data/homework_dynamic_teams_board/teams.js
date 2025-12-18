@@ -21,6 +21,8 @@ const potentialTeams = [
 
 // Function to update the board
 function updateBoard(data) {
+    const rowHeight = 50;
+
     // 1. Sort data by points descending, then goal difference
     data.sort((a, b) => {
         const gdA = a.goalsFor - a.goalsAgainst;
@@ -81,13 +83,10 @@ function updateBoard(data) {
     );
 
     // 3. Update all teams (including newly entered ones)
-    const rowHeight = 50;
-
-    leaderboard.selectAll('.team').each(function (d, i) {
+    leaderboard.selectAll('.team').each(function (d) {
         const team = d3.select(this);
         const index = data.findIndex(t => t.name === d.name);
 
-        // If the team is not in the current data (exiting), it will be handled by exit
         if (index === -1) return;
 
         const gd = d.goalsFor - d.goalsAgainst;
@@ -96,7 +95,8 @@ function updateBoard(data) {
         team.select('.points').text(d.points);
         team.select('.gd').text(gd > 0 ? `+${gd}` : gd);
 
-        // Animate position
+        // Animate position (top) for all teams
+        // Using transition on the selection itself is safer
         team.transition()
             .duration(1000)
             .style('top', `${index * rowHeight}px`);
